@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "lifecraftregular";
+  src: url("../fonts/Skurri.woff") format("woff2"),
+    url("../fonts/Skurri\ compact.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 .container {
   margin-top: 5.25em;
   margin-bottom: 84px;
@@ -6,7 +13,8 @@ img {
   height: 6.25rem;
   width: 6.25rem;
 }
-.char-pick-grid .card {
+.char-pick-grid .card,
+.enemies-grid .card {
   display: inline-block;
 }
 @media (max-width: 575.98px) {
@@ -18,4 +26,8 @@ img {
   .container {
     margin-top: 124px;
   }
+}
+.card-title {
+  font-family: "lifecraftregular";
+  font-size: 3rem;
 }

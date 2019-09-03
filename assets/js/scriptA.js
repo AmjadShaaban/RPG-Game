@@ -131,6 +131,7 @@ $(document).ready(() => {
   };
   var selectedFaction = "";
   var selectedChar;
+  var selectedEnemy;
   var counter = 0;
 
   const factions = characters.reduce((factions, character) => {
@@ -144,14 +145,22 @@ $(document).ready(() => {
 
     return factions;
   }, {});
-  console.log(selectedChar);
+  /* 
+    
+          * "Character": creates a bootstrap card per character in an array (faction).
+          * ".cardclass": a choice on which html <div> to place the cards (characters)
+          * the "." DOT IS A MUST!!!!.
+          * "charClass": gives each bootstrap card a class per array (faction). 
 
-  const createCard = character => {
-    var card = $("<div>");
-    var img = $("<img>");
-    var bdy = $("<div>");
-    var txt = $("<p>");
-    card.attr("class", "card");
+  */
+
+  const createCard = (character, parentDiv = "", charCardClass = "") => {
+    var card = $("<div>"),
+      img = $("<img>"),
+      bdy = $("<div>"),
+      txt = $("<p>"),
+      papaDiv = $(parentDiv);
+    card.attr("class", "card " + charCardClass);
     card.attr("id", "faction-pick");
     card.attr("style", "width: 13.5rem;");
     card.attr("faction");
@@ -159,66 +168,93 @@ $(document).ready(() => {
     bdy.attr("class", "card-body");
     txt.attr("class", "card-text");
     img.attr("src", character.ImgSrc);
-    txt.append(
-      character.Name +
-        "<br />" +
-        character.Title +
-        "<br />&nbsp&nbsp Health: " +
-        character.HitPoints +
-        "<br />&nbsp&nbsp Damage type: " +
-        character.DmgType
-    );
+    txt.append(character.Name);
     img.appendTo(card);
     bdy.appendTo(card);
     txt.appendTo(bdy);
-    card.prependTo(".char-pick-grid");
+    card.prependTo(papaDiv);
     counter += 1;
-    console.log(counter);
-    card.on("click", selectCard);
-    function selectCard() {
-      selectedFaction = character.Faction;
-      selectedChar = character;
-      console.log(selectedFaction);
-      console.log(selectedChar);
-      for (var i = 1; i < counter; i++) {
-        card.remove();
-        card.off("click", selectCard);
-        $("#faction-pick").remove();
-      }
-
-      counter = 0;
-      console.log(counter);
-      console.log("counter reset!");
-      if (selectedChar.Name === "The Horde") {
-        factions.Horde.forEach(character => {
-          createCard(character);
-        });
-      } else if (selectedChar.Name === "The Alliance") {
-        factions.Alliance.forEach(character => {
-          createCard(character);
-        });
-      }
-    }
+    card.on("click", selectplayer);
   };
-  function playGame() {
-    factions.FACTION.forEach(character => {
-      createCard(character);
-    });
+  function selectplayer() {
+    selectedFaction = character.Faction;
+    selectedChar = character;
+    for (var i = 1; i < counter; i++) {
+      $(".game-area").text("");
+      card.remove();
+      card.off("click", selectCard);
+      $("#faction-pick").remove();
+    }
+    counter = 0;
   }
-  playGame();
-  console.log(factions);
-  console.log(selectedChar);
 
+  //   card.on("click", selectCard);
+  //   function selectCard() {
+  //     selectedFaction = character.Faction;
+  //     selectedChar = character;
+  //     console.log(selectedFaction);
+  //     console.log(selectedChar);
+  //     for (var i = 1; i < counter; i++) {
+  //       $(".game-area").text("");
+  //       card.remove();
+  //       card.off("click", selectCard);
+  //       $("#faction-pick").remove();
+  //     }
+  //     counter = 0;
+  //     if (selectedChar.Name === "The Horde") {
+  //       $(".game-area").text("Pick your Champion.");
+  //       factions.Horde.forEach(character => {
+  //         createCard(character, ".char-pick-grid", "chioce-grid");
+  //       });
+  //     } else if (selectedChar.Name === "The Alliance") {
+  //       $(".game-area").text("Pick your Champion.");
+  //       factions.Alliance.forEach(character => {
+  //         createCard(character, ".char-pick-grid", "choice-grid");
+  //       });
+  //     }
+  //     function selectEnemy() {
+  //       if (selectedChar.Faction === "H") {
+  //         $(".champion").text("Your Champion:");
+  //         createCard(selectedChar, ".champion", "player-choice");
+  //         factions.Alliance.forEach(character => {
+  //           createCard(character, ".enemies-grid", "enemies");
+  //         });
+  //       } else if (selectedChar.Faction === "A") {
+  //         $(".champion").text("Your Champion:");
+  //         createCard(selectedChar, ".champion", "player-choice");
+  //         factions.Horde.forEach(character => {
+  //           createCard(character, ".enemies-grid", "enemies");
+  //         });
+  //       }
+  //     }
+  //     selectEnemy();
+  //   }
+  // };
+  // var startGame = () => {
+  //   $(".game-area").text("Welcome to Warcraft RPG. Pick your faction!");
+  //   factions.FACTION.forEach(character => {
+  //     createCard(character, ".char-pick-grid", "choice-grid");
+  //   });
+  // };
+  // startGame();
+
+  // factions.FACTION.forEach(character => {
+  //   createCard(character, ".char-pick-grid", "choice-grid");
+  //   console.log(selectedChar);
+  //   console.log(selectedFaction);
+  // });
   // $(".enemies-grid");
   // factions.Alliance.forEach(character => {
   //   createCard(character);
   // });
-  // factions.Horde.forEach(character => {
-  //   createCard(character);
-  // });
+  factions.Horde.forEach(character => {
+    createCard(character, ".char-pick-grid", "choice-grid");
+  });
+  $(".choice-grid").on("click");
   // factions.Scourge.forEach(character => {
   //   createCard(character);
   // });
+  console.log(factions);
 
   // $(".char-pick-grid").on("click", "#faction-pick", function() {
   //   $(this)

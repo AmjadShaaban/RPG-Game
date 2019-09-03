@@ -6,9 +6,8 @@ img {
   height: 6.25rem;
   width: 6.25rem;
 }
-.char-pick-grid .card {
-  display: inline-block;
-}
+/* .char-pick-grid .card {
+} */
 @media (max-width: 575.98px) {
   .navbar-brand {
     width: 100%;
@@ -25,8 +24,7 @@ img {
 .div4,
 .div5,
 .div1-1 {
-  margin: 2rem;
-  padding: 2rem;
+  display: inline;
 }
 .div1 {
   background-color: aqua;
@@ -48,18 +46,18 @@ img {
   background-color: darkgray;
 }
 .card {
-  display: inline-block;
+  float: left;
 }
 .game-body {
   display: grid;
   grid-gap: 1px;
-  grid-template-columns: 10rem 10rem 10rem 10rem 10rem;
+  grid-template-columns: 10rem 10rem 10rem;
   grid-template-areas:
-    "div1 div1 div1 div1 div1"
-    "div2 div2 div2 div2 div2"
-    "div3 div3 div3 div3 div3"
-    "div4 div4 div4 div4 div4"
-    "div5 div5 div5 div5 div5";
+    "div1 div1 div1"
+    "div2 div2 div2"
+    "div3 div3 div3"
+    "div4 div4 div4"
+    "div5 div5 div5";
   background-color: aqua;
   color: coral;
 }
