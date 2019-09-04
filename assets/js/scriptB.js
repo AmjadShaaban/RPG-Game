@@ -27,9 +27,7 @@ $(document).ready(() => {
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/sylv2.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Shadow"
+      baseDmg: 8
     },
     {
       Name: "Anduin Varyian Wrynn",
@@ -37,9 +35,7 @@ $(document).ready(() => {
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/anduin2.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Holy"
+      baseDmg: 8
     },
     {
       Name: "Arthas Menethil",
@@ -47,9 +43,7 @@ $(document).ready(() => {
       Faction: "S",
       HitPoints: 400,
       ImgSrc: "./assets/images/arthas.gif",
-      MinDmg: 33,
-      MaxDmg: 38,
-      DmgType: "Chaos"
+      baseDmg: 8
     },
     {
       Name: "Chen Stromstout",
@@ -57,9 +51,7 @@ $(document).ready(() => {
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/panda.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Nature"
+      baseDmg: 8
     },
     {
       Name: "Some BE Mage",
@@ -67,9 +59,7 @@ $(document).ready(() => {
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/firemage1.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Fire"
+      baseDmg: 8
     },
     {
       Name: "Varian Wrynn",
@@ -77,9 +67,7 @@ $(document).ready(() => {
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/varianwrynn.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Physical"
+      baseDmg: 8
     },
     {
       Name: "Thrall (Go'el)",
@@ -87,9 +75,7 @@ $(document).ready(() => {
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/thrall.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Nature"
+      baseDmg: 8
     },
     {
       Name: "Jaina Proudmoure",
@@ -97,9 +83,7 @@ $(document).ready(() => {
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/jaina2.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Frost"
+      baseDmg: 8
     },
     {
       Name: "Monoroth",
@@ -107,9 +91,7 @@ $(document).ready(() => {
       Faction: "S",
       HitPoints: 300,
       ImgSrc: "./assets/images/monoroth.gif",
-      MinDmg: 26,
-      MaxDmg: 31,
-      DmgType: "Chaos"
+      baseDmg: 8
     },
     {
       Name: "Some Lock",
@@ -117,9 +99,7 @@ $(document).ready(() => {
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/undeadlock.gif",
-      MinDmg: 18,
-      MaxDmg: 21,
-      DmgType: "Fire"
+      baseDmg: 8
     }
   ];
 
@@ -226,7 +206,7 @@ $(document).ready(() => {
           createCard(selectedChar, ".champion", "player-choice");
           $(".card").off("click");
           isCharacterSelected = true;
-          console.log("flag = ture");
+          console.log("flag = Hture");
           $(".game-area").text("Pick your Opponent:");
           factions.Alliance.forEach(character => {
             createCard(character, ".enemies-grid", "enemies");
@@ -234,6 +214,9 @@ $(document).ready(() => {
         } else if (selectedChar.Faction === "A") {
           $(".champion").text("Your Champion:");
           createCard(selectedChar, ".champion", "player-choice");
+          $(".card").off("click");
+          isCharacterSelected = true;
+          console.log("flag = Ature");
           $(".game-area").text("Pick your Opponent:");
           factions.Horde.forEach(character => {
             createCard(character, ".enemies-grid", "enemies");
@@ -245,24 +228,31 @@ $(document).ready(() => {
         attackBtn.addClass("btn btn-secondary");
         attackBtn.text("ATTACK!");
         $(".attack-button").append(attackBtn);
+        calcAtkDmg(selectedChar, 18, 3);
         var turn = 0;
         $(attackBtn).on("click", function() {
           if (turn % 2 === 0) {
+            var RNG = Math.floor(Math.random() * 4.0) + 2;
             selectedEnemy.HitPoints =
-              selectedEnemy.HitPoints -
-              (selectedChar.MinDmg + selectedChar.MaxDmg) / 2;
+              selectedEnemy.HitPoints - selectedChar.baseDmg * RNG;
             turn++;
+            console.log(RNG);
             console.log(selectedEnemy.HitPoints);
             console.log(selectedChar.HitPoints);
           } else {
             selectedChar.HitPoints =
-              selectedChar.HitPoints -
-              (selectedEnemy.MinDmg + selectedEnemy.MaxDmg) / 2;
+              selectedChar.HitPoints - selectedEnemy.baseDmg * 1.5;
             turn++;
             console.log(selectedEnemy.HitPoints);
             console.log(selectedChar.HitPoints);
           }
         });
+        function calcAtkDmg(character, x, y) {
+          var min = character.baseDmg + x;
+          var max = character.baseDmg + x * y;
+          console.log(min);
+          console.log(max);
+        }
       }
     }
   };
@@ -272,6 +262,17 @@ $(document).ready(() => {
       createCard(character, ".char-pick-grid", "choice-grid");
     });
   };
+  for (var i = 0; i < 100; i++) {
+    var a,
+      b = 18,
+      c = 21,
+      d = 1,
+      e = Math.random() * 2.0;
+    f = 2;
+    a = ((b + c) / 2 / d) * ((e * f - 1) / 100 + 1);
+    console.log(e);
+  }
+
   startGame();
 
   // factions.FACTION.forEach(character => {
