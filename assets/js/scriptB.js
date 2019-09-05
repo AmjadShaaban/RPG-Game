@@ -3,23 +3,19 @@ $(document).ready(() => {
   const characters = [
     {
       Name: "The Horde",
-      Title: "4 Heros",
+      Title: "",
       Faction: "F",
       HitPoints: 1000,
       ImgSrc: "./assets/images/fth.gif",
-      MinDmg: 180,
-      MaxDmg: 210,
-      DmgType: "FOR THE HORDE!!"
+      baseDmg: ""
     },
     {
       Name: "The Alliance",
-      Title: "4 Heros",
+      Title: "",
       Faction: "F",
       HitPoints: 1000,
       ImgSrc: "./assets/images/fta.gif",
-      MinDmg: 180,
-      MaxDmg: 210,
-      DmgType: "FOR THE ALLIANCE!!"
+      baseDmg: ""
     },
     {
       Name: "Sylvanas Windrunner",
@@ -27,15 +23,15 @@ $(document).ready(() => {
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/sylv2.gif",
-      baseDmg: 8
+      baseDmg: 15
     },
     {
-      Name: "Anduin Varyian Wrynn",
+      Name: "Anduin Wrynn",
       Title: "King of The Alliance",
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/anduin2.gif",
-      baseDmg: 8
+      baseDmg: 15
     },
     {
       Name: "Arthas Menethil",
@@ -43,7 +39,7 @@ $(document).ready(() => {
       Faction: "S",
       HitPoints: 400,
       ImgSrc: "./assets/images/arthas.gif",
-      baseDmg: 8
+      baseDmg: 20
     },
     {
       Name: "Chen Stromstout",
@@ -51,15 +47,15 @@ $(document).ready(() => {
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/panda.gif",
-      baseDmg: 8
+      baseDmg: 12
     },
     {
-      Name: "Some BE Mage",
+      Name: "Arcanist Janeda",
       Title: "Fire Mage",
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/firemage1.gif",
-      baseDmg: 8
+      baseDmg: 12
     },
     {
       Name: "Varian Wrynn",
@@ -67,15 +63,15 @@ $(document).ready(() => {
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/varianwrynn.gif",
-      baseDmg: 8
+      baseDmg: 15
     },
     {
-      Name: "Thrall (Go'el)",
+      Name: "Thrall",
       Title: "Former Warchief of the Horde",
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/thrall.gif",
-      baseDmg: 8
+      baseDmg: 15
     },
     {
       Name: "Jaina Proudmoure",
@@ -83,7 +79,7 @@ $(document).ready(() => {
       Faction: "A",
       HitPoints: 200,
       ImgSrc: "./assets/images/jaina2.gif",
-      baseDmg: 8
+      baseDmg: 15
     },
     {
       Name: "Monoroth",
@@ -91,15 +87,15 @@ $(document).ready(() => {
       Faction: "S",
       HitPoints: 300,
       ImgSrc: "./assets/images/monoroth.gif",
-      baseDmg: 8
+      baseDmg: 20
     },
     {
-      Name: "Some Lock",
+      Name: "Mile Raitheborne",
       Title: "Undead Warlock",
       Faction: "H",
       HitPoints: 200,
       ImgSrc: "./assets/images/undeadlock.gif",
-      baseDmg: 8
+      baseDmg: 12
     }
   ];
 
@@ -113,6 +109,8 @@ $(document).ready(() => {
   var selectedChar;
   var selectedEnemy;
   var isCharacterSelected = false;
+  var turnsWon = 0;
+  var turnsLost = 0;
   var counter = 0;
 
   const factions = characters.reduce((factions, character) => {
@@ -228,31 +226,88 @@ $(document).ready(() => {
         attackBtn.addClass("btn btn-secondary");
         attackBtn.text("ATTACK!");
         $(".attack-button").append(attackBtn);
-        calcAtkDmg(selectedChar, 18, 3);
         var turn = 0;
         $(attackBtn).on("click", function() {
           if (turn % 2 === 0) {
-            var RNG = Math.floor(Math.random() * 4.0) + 2;
-            selectedEnemy.HitPoints =
-              selectedEnemy.HitPoints - selectedChar.baseDmg * RNG;
+            var RNG = Math.floor(Math.random() * 5) + 1;
+            var playerHitDmg = selectedChar.baseDmg * RNG;
+            selectedEnemy.HitPoints = selectedEnemy.HitPoints - playerHitDmg;
+            $(".child-right").append(
+              '<div class="combat-log-player">+ You Hit ' +
+                selectedEnemy.Name +
+                " for " +
+                playerHitDmg +
+                " Damage (" +
+                RNG +
+                "x)</div>"
+            );
             turn++;
             console.log(RNG);
+            console.log(playerHitDmg);
             console.log(selectedEnemy.HitPoints);
             console.log(selectedChar.HitPoints);
           } else {
-            selectedChar.HitPoints =
-              selectedChar.HitPoints - selectedEnemy.baseDmg * 1.5;
+            var enemyHitDmg = selectedEnemy.baseDmg * 1.5;
+            selectedChar.HitPoints = selectedChar.HitPoints - enemyHitDmg * 1.5;
+            $(".child-right").append(
+              '<div class="combat-log-enemy">- ' +
+                selectedEnemy.Name +
+                " Hits YOU for " +
+                enemyHitDmg +
+                "</div>"
+            );
             turn++;
+            console.log(enemyHitDmg);
             console.log(selectedEnemy.HitPoints);
             console.log(selectedChar.HitPoints);
           }
+          if (selectedEnemy.HitPoints <= 0) {
+            $(".child-right").append(
+              '<div class="winner">' + selectedEnemy.Name + " is Defeated!"
+            );
+            console.log("ENEMY DED!");
+            $(attackBtn).off("click");
+            $(attackBtn).remove();
+            turnsWon++;
+            reset();
+          } else if (selectedChar.HitPoints <= 0) {
+            $(".child-right").append(
+              '<div class="defeat">You are Defeated!</div>'
+            );
+            console.log("YOU DED BISH!");
+            $(attackBtn).off("click");
+            $(attackBtn).remove();
+            turnsLost++;
+            reset();
+          }
+
+          function reset() {
+            var resetBtn = $("<button>");
+            resetBtn.addClass("btn btn-secondary");
+            resetBtn.text("Play again?");
+            $(".attack-button").append(resetBtn);
+            $(resetBtn).on("click", function() {
+              $(".child-right").remove();
+              $(".parent").append('<div class="child-right"></div>');
+              $(".score-card").text(
+                "Games Won: " +
+                  turnsWon +
+                  " | Games Lost: " +
+                  turnsLost +
+                  " | Total games played: " +
+                  (turnsWon + turnsLost)
+              );
+              $(resetBtn).remove();
+              $(".player-choice").remove();
+              $(".enemy").remove();
+              selectedFaction = "";
+              selectedChar = "";
+              selectedEnemy = "";
+              isCharacterSelected = false;
+              startGame();
+            });
+          }
         });
-        function calcAtkDmg(character, x, y) {
-          var min = character.baseDmg + x;
-          var max = character.baseDmg + x * y;
-          console.log(min);
-          console.log(max);
-        }
       }
     }
   };
@@ -262,16 +317,6 @@ $(document).ready(() => {
       createCard(character, ".char-pick-grid", "choice-grid");
     });
   };
-  for (var i = 0; i < 100; i++) {
-    var a,
-      b = 18,
-      c = 21,
-      d = 1,
-      e = Math.random() * 2.0;
-    f = 2;
-    a = ((b + c) / 2 / d) * ((e * f - 1) / 100 + 1);
-    console.log(e);
-  }
 
   startGame();
 

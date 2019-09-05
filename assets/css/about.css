@@ -5,6 +5,23 @@
   font-weight: normal;
   font-style: normal;
 }
+.combat-log-enemy,
+.combat-log-player {
+  font-size: 0.5rem;
+}
+.parent {
+  padding: 0px, auto;
+}
+.child-left {
+  float: left;
+  width: auto;
+  height: auto;
+}
+.child-right {
+  float: right;
+  width: auto;
+  height: auto;
+}
 .container {
   margin-top: 5.25em;
   margin-bottom: 84px;
