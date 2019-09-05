@@ -191,6 +191,7 @@ $(document).ready(() => {
           console.log("flag = ture");
           card.off("click");
           $(".enemies-grid").remove();
+          $(".char-pick-grid").prepend('<div class="enemies-grid"></div>');
         }
         counter = 0;
         createCard(selectedEnemy, ".char-pick-grid", "enemy");
@@ -289,6 +290,11 @@ $(document).ready(() => {
             $(resetBtn).on("click", function() {
               $(".child-right").remove();
               $(".parent").append('<div class="child-right"></div>');
+              $(".child-right").css({
+                float: "right",
+                width: "auto",
+                height: "auto"
+              });
               $(".score-card").text(
                 "Games Won: " +
                   turnsWon +
@@ -301,9 +307,13 @@ $(document).ready(() => {
               $(".player-choice").remove();
               $(".enemy").remove();
               selectedFaction = "";
+              selectedChar.HitPoints = 200;
               selectedChar = "";
+              selectedEnemy.HitPoints = 200;
               selectedEnemy = "";
               isCharacterSelected = false;
+              counter = 0;
+              $(".champion").text("");
               startGame();
             });
           }
@@ -317,7 +327,6 @@ $(document).ready(() => {
       createCard(character, ".char-pick-grid", "choice-grid");
     });
   };
-
   startGame();
 
   // factions.FACTION.forEach(character => {
